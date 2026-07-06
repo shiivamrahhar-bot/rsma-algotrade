@@ -1,0 +1,13 @@
+{
+  "name": "rsma-algotrade",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "install:all": "cd backend && npm install && cd ../frontend && npm install"
+  },
+  "devDependencies": {
+    "playwright": "^1.61.1"
+  }
+}

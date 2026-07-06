@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: rsma-algotrade
+    runtime: node
+    plan: free
+    buildCommand: cd frontend && npm install && npm run build && cd ../backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: KITE_API_KEY
+        sync: false
+      - key: KITE_API_SECRET
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: FRONTEND_URL
+        sync: false

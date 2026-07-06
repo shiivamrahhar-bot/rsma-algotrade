@@ -24,6 +24,10 @@ const KITE_API_SECRET = process.env.KITE_API_SECRET;
 const KITE_BASE = "https://api.kite.trade";
 const KITE_LOGIN = "https://kite.zerodha.com/connect/login";
 
+if (isProd) {
+  app.set("trust proxy", 1);
+}
+
 if (!KITE_API_KEY || !KITE_API_SECRET) {
   console.warn(
     "⚠️  KITE_API_KEY and KITE_API_SECRET not set. Copy backend/.env.example to backend/.env"

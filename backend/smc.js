@@ -647,11 +647,13 @@ function summarizeTrades(trades) {
   const grossLoss = Math.abs(losses.reduce((s, t) => s + t.pnlPct, 0));
   const totalPnlPct = closed.reduce((s, t) => s + t.pnlPct, 0);
 
+  // Build equity curve in exit-date order so chart timestamps are ascending.
+  const closedByExit = [...closed].sort((a, b) => new Date(a.exitDate) - new Date(b.exitDate));
   let cumulative = 0;
   let peak = 0;
   let maxDrawdown = 0;
   const equityCurve = [];
-  for (const t of closed) {
+  for (const t of closedByExit) {
     cumulative += t.pnlPct;
     peak = Math.max(peak, cumulative);
     maxDrawdown = Math.max(maxDrawdown, peak - cumulative);

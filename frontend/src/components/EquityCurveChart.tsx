@@ -74,11 +74,19 @@ export default function EquityCurveChart({ points, height = 220 }: EquityCurveCh
     if (!series || !chart || points.length === 0) return;
 
     const data = points
-      .map((p) => ({ time: Math.floor(new Date(p.date).getTime() / 1000) as Time, value: p.cumulativePnlPct }))
+      .map((p) => ({
+        time: Math.floor(new Date(p.date).getTime() / 1000) as Time,
+        value: p.cumulativePnlPct,
+      }))
+      .sort((a, b) => (a.time as number) - (b.time as number))
       .filter((v, i, arr) => i === 0 || v.time !== arr[i - 1].time);
 
-    series.setData(data);
-    chart.timeScale().fitContent();
+    try {
+      series.setData(data);
+      chart.timeScale().fitContent();
+    } catch (err) {
+      console.error("Equity curve render failed:", err);
+    }
   }, [points]);
 
   if (points.length === 0) {

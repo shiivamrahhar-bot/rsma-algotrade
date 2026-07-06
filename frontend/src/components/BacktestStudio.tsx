@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Component, useState, type ErrorInfo, type ReactNode } from "react";
 import { api, demoBacktest } from "../api/client";
 import { DataTable, LoadingSpinner, StatCard } from "./ui";
 import { InfoPanel } from "./InfoPanel";
@@ -19,6 +19,32 @@ const TIMEFRAMES: { id: BacktestInterval; label: string }[] = [
 ];
 
 const PERIODS = [3, 6, 12];
+
+class BacktestResultsBoundary extends Component<
+  { children: ReactNode },
+  { error: string | null }
+> {
+  state = { error: null as string | null };
+
+  static getDerivedStateFromError(error: Error) {
+    return { error: error.message || "Backtest results render nahi ho paaye" };
+  }
+
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.error("BacktestStudio render error:", error, info);
+  }
+
+  render() {
+    if (this.state.error) {
+      return (
+        <div className="error-banner">
+          Backtest data aa gaya lekin screen render nahi ho paayi: {this.state.error}
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 function exitReasonLabel(reason: BacktestTrade["exitReason"]): { label: string; cls: string } {
   if (reason === "TARGET_HIT") return { label: "Target Hit", cls: "positive" };
@@ -176,7 +202,7 @@ export default function BacktestStudio({ demoMode = false }: BacktestStudioProps
       )}
 
       {result && (
-        <>
+        <BacktestResultsBoundary key={`${result.tradingsymbol}-${result.interval}-${result.periodTo}`}>
           {loading && (
             <div className="tag-live bt-refreshing">
               <span className="spinner sm" /> Naya scan chal raha hai — purana result dikh raha hai jab tak naya na aa jaaye...
@@ -237,7 +263,7 @@ export default function BacktestStudio({ demoMode = false }: BacktestStudioProps
               emptyMessage="Is period mein koi trades nahi mile"
             />
           </div>
-        </>
+        </BacktestResultsBoundary>
       )}
     </div>
   );

@@ -2,7 +2,10 @@
 
 Zerodha Kite Connect trading portal built with React + Express.
 
-## Setup
+**GitHub:** https://github.com/shivamrahar/rsma-algotrade  
+**Live (Render):** https://rsma-algotrade.onrender.com
+
+## Setup (Local)
 
 ### 1. Backend (port 5000)
 
@@ -26,7 +29,31 @@ Open http://localhost:5173 — click **Login with Kite** or **Preview Demo Dashb
 
 ## Redirect URI
 
-Set in Kite Developer Console: `http://localhost:5000/callback`
+| Environment | Kite Developer Console redirect URL |
+|-------------|-------------------------------------|
+| Local | `http://localhost:5000/callback` |
+| Render | `https://rsma-algotrade.onrender.com/callback` |
+
+## Deploy on Render
+
+| Setting | Value |
+|---------|--------|
+| **Service type** | Web Service |
+| **Build Command** | `cd frontend && npm install && npm run build && cd ../backend && npm install` |
+| **Start Command** | `cd backend && npm start` |
+| **Instance** | Free |
+
+### Render environment variables
+
+| Key | Value |
+|-----|--------|
+| `NODE_ENV` | `production` |
+| `KITE_API_KEY` | Your Zerodha API key |
+| `KITE_API_SECRET` | Your Zerodha API secret |
+| `SESSION_SECRET` | Long random string |
+| `FRONTEND_URL` | `https://rsma-algotrade.onrender.com` |
+
+See `backend/.env.render.example` for a copy-paste template.
 
 ## API Data Pulled
 
